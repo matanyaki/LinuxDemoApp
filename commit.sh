@@ -31,6 +31,7 @@ fi
 # Read Developer Name and GitHub URL from CSV based on TaskID
 DEVELOPER_NAME=$(awk -F',' -v task_id="$TASK_ID" 'NR > 1 && $1 == task_id {print $4}' "$CSV_FILE")
 GITHUB_URL=$(awk -F',' -v task_id="$TASK_ID" 'NR > 1 && $1 == task_id {print $5}' "$CSV_FILE")
+DESC=$(awk -F',' -v task_id="$TASK_ID" 'NR > 1 && $1 == task_id {print $2}' "$CSV_FILE")
 
 if [ -z "$DEVELOPER_NAME" ] || [ -z "$GITHUB_URL" ]; then
   echo "Error: Developer Name or GitHub URL missing for TaskID $TASK_ID in CSV."
@@ -42,7 +43,7 @@ BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
 
 # Create commit message format
 CURRENT_DATE=$(date +"%Y-%m-%d_%H-%M-%S")
-COMMIT_MESSAGE="$TASK_ID - $CURRENT_DATE - $BRANCH_NAME - $DEVELOPER_NAME - Task Desc - $DEV_MESSAGE"
+COMMIT_MESSAGE="$TASK_ID - $CURRENT_DATE - $BRANCH_NAME - $DEVELOPER_NAME - $DESC - $DEV_MESSAGE"
 
 # Perform Git Operations
 git add .
